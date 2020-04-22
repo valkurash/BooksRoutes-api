@@ -37,7 +37,7 @@ export class BookEntity {
 
   @OneToMany(
     type => RouteEntity,
-    route => route.id,
+    route => route.book,
   )
   routes: RouteEntity[];
 

@@ -32,7 +32,7 @@ export class RouteEntity {
 
   @OneToMany(
     type => PointEntity,
-    point => point.id,
+    point => point.route,
   )
   points: PointEntity[];
 

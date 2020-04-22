@@ -9,7 +9,6 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import BaseApiResponse from '../base/base.api.response';
-import ExternalServicesException from '../exceptions/externalServicesException';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -36,12 +35,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
       case ForbiddenException:
         json = this.createJsonFromForbiddenException(exception);
-        break;
-
-      case ExternalServicesException:
-        json = this.createJsonFromExternalServicesException(
-          exception as ExternalServicesException,
-        );
         break;
     }
 
@@ -104,18 +97,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       result: null,
       errorCode: exception.getStatus(),
       errorMessage: 'Validation Error',
-      validation,
-    };
-  }
-  private createJsonFromExternalServicesException(
-    exception: ExternalServicesException,
-  ): BaseApiResponse<string> {
-    let validation;
-
-    return {
-      result: null,
-      errorCode: exception.getStatus(),
-      errorMessage: exception.message,
       validation,
     };
   }

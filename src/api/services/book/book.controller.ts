@@ -9,6 +9,20 @@ import { BookService } from './book.service';
   model: {
     type: BookEntity,
   },
+  routes: {},
+  query: {
+    join: {
+      authors: {
+        eager: true,
+      },
+      routes: {
+        eager: false,
+      },
+      'routes.points': {
+        eager: false,
+      },
+    },
+  },
 })
 @ApiTags('book')
 @Controller('book')

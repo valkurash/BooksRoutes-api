@@ -1,5 +1,4 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { BookEntity } from './book.entity';
 import { RouteEntity } from './route.entity';
 
 @Entity('language')
