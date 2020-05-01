@@ -8,6 +8,8 @@ import { PointEntity } from './entities/point.entity';
 import { AuthorEntity } from './entities/author.entity';
 import { CountryEntity } from './entities/country.entity';
 import { LanguageEntity } from './entities/language.entity';
+import { RouteService } from './services/route/route.service';
+import RouteController from './services/route/route.controller';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { LanguageEntity } from './entities/language.entity';
       LanguageEntity,
     ]),
   ],
-  providers: [BookService],
-  controllers: [BookController],
+  providers: [BookService, RouteService],
+  controllers: [BookController, RouteController],
 })
 export class ApiModule {}

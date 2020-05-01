@@ -18,6 +18,12 @@ import { BookService } from './book.service';
       routes: {
         eager: false,
       },
+      'routes.countries': {
+        eager: false,
+      },
+      'routes.languages': {
+        eager: false,
+      },
       'routes.points': {
         eager: false,
       },
