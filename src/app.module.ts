@@ -2,13 +2,16 @@ import { config } from 'dotenv';
 config();
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BookEntity } from './api/entities/book.entity';
-import { AuthorEntity } from './api/entities/author.entity';
-import { RouteEntity } from './api/entities/route.entity';
-import { CountryEntity } from './api/entities/country.entity';
-import { LanguageEntity } from './api/entities/language.entity';
-import { PointEntity } from './api/entities/point.entity';
+import { BookEntity } from './api/book/entities/book.entity';
+import { AuthorEntity } from './api/author/entities/author.entity';
+import { RouteEntity } from './api/route/entities/route.entity';
+import { LanguageEntity } from './api/dictionaries/entities/language.entity';
+import { PointEntity } from './api/route/entities/point.entity';
 import { ApiModule } from './api/api.module';
+import { AuthModule } from './api/auth/auth.module';
+import { CountryEntity } from './api/dictionaries/entities/country.entity';
+import { UserEntity } from './api/user/entities/user.entity';
+import { UserModule } from './api/user/user.module';
 
 @Module({
   imports: [
@@ -26,11 +29,14 @@ import { ApiModule } from './api/api.module';
         AuthorEntity,
         CountryEntity,
         LanguageEntity,
+        UserEntity,
       ],
       synchronize: true,
       logging: true,
     }),
     ApiModule,
+    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {}

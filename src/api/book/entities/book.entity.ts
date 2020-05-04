@@ -6,8 +6,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { RouteEntity } from './route.entity';
-import { AuthorEntity } from './author.entity';
+import { RouteEntity } from '../../route/entities/route.entity';
+import { AuthorEntity } from '../../author/entities/author.entity';
 
 @Entity('book')
 export class BookEntity {

@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { RouteEntity } from './route.entity';
+import { RouteEntity } from '../../route/entities/route.entity';
 
 @Entity('country')
 export class CountryEntity {

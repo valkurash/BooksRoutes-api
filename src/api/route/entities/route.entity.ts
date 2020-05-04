@@ -7,11 +7,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { BookEntity } from './book.entity';
+import { BookEntity } from '../../book/entities/book.entity';
 import { PointEntity } from './point.entity';
-import { AuthorEntity } from './author.entity';
-import { CountryEntity } from './country.entity';
-import { LanguageEntity } from './language.entity';
+import { LanguageEntity } from '../../dictionaries/entities/language.entity';
+import { CountryEntity } from '../../dictionaries/entities/country.entity';
 
 @Entity('route')
 export class RouteEntity {
