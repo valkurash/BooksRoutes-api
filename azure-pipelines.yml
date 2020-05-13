@@ -11,7 +11,7 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '75cb36cd-adb0-4fc7-a293-9f2dbb458d93'
-  imageRepository: 'valkurashbooksroutesapi'
+  imageRepository: 'booksroutesapi2'
   containerRegistry: 'gutesterregistry.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/docker/Dockerfile'
   tag: '$(Build.BuildId)'
