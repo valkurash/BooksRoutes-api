@@ -1,0 +1,41 @@
+version: '3'
+networks:
+  booksroutes2:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.28.0.1/16
+services:
+  booksroutes-api2:
+    image: gutesterregistry.azurecr.io/booksroutesapi2
+    container_name:  booksroutes-api2
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+    networks:
+      - booksroutes2
+    environment:
+      - TYPEORM_CONNECTION=postgres
+      - TYPEORM_HOST=gisdatabase
+      - TYPEORM_USERNAME=root
+      - TYPEORM_PASSWORD=root
+      - TYPEORM_DATABASE=books_routes
+      - TYPEORM_PORT=5435
+      - TYPEORM_SYNCHRONIZE=true
+      - TYPEORM_LOGGING=true
+      - JWT_SECRET=secret12312312
+    ports:
+      - '1337:1337'
+  database:
+    image: 'mdillon/postgis'
+    volumes:
+      - '/etc/localtime:/etc/localtime:ro'
+      - '/containerdata/database:/var/lib/postgresql/data'
+    container_name: gisdatabase
+    ports:
+      - '5435:5432'
+    networks:
+      - booksroutes2
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: books_routes
