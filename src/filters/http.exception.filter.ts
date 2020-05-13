@@ -9,6 +9,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import BaseApiResponse from '../base/base.api.response';
+import ApiException from '../exceptions/api.exception';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -36,6 +37,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       case ForbiddenException:
         json = this.createJsonFromForbiddenException(exception);
         break;
+
+      case ApiException:
+        json = this.createJsonFromApiException(exception as ApiException);
+        break;
     }
 
     if (!json) {
@@ -43,6 +48,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     response.status(200).json(json);
+  }
+
+  private createJsonFromApiException(
+    exception: ApiException,
+  ): BaseApiResponse<string> {
+    return {
+      result: null,
+      errorCode: exception.getStatus(),
+      errorMessage: exception.toString(),
+    };
   }
 
   private createJsonFromHttpExceptions(

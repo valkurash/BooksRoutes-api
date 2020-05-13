@@ -15,8 +15,15 @@ export class ResponseInterceptor<T>
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<BaseApiResponse<T>> {
-    return next
-      .handle()
-      .pipe(map(data => ({ errorCode: 0, errorMessage: '', result: data })));
+    return next.handle().pipe(
+      map(data => {
+        //ToDo убрать костыль (почему то вызывается дважды в колбеке от фейсбука)
+        if (!data.toString()?.includes('errorCode')) {
+          return { errorCode: 0, errorMessage: '', result: data };
+        } else {
+          return data;
+        }
+      }),
+    );
   }
 }

@@ -24,7 +24,7 @@ export default class UserController {
   @UseGuards(JwtAuthGuard)
   @Get()
   public async get(@User() user: UserPayload): Promise<UserDto> {
-    return this.userService.findOne(user.email);
+    return this.userService.findById(user.userId);
   }
 
   @ApiOperation({ summary: 'Регистрация' })

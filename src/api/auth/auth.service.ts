@@ -2,13 +2,21 @@ import { Injectable } from '@nestjs/common';
 import JwtUserPayload, { UserPayload } from './dto/jwtUserPayload.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
+import UserDto from '../user/dtos/user.dto';
+import { SocialType } from '../user/entities/socialType';
+import RegisterRequestDto from '../user/dtos/register.request.dto';
+import SocialProfile from './dto/socialProfile';
 
 @Injectable()
 export class AuthService {
+  private url: string;
+
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    this.url = `http://localhost:1337`;
+  }
 
   public async validateUser(
     username: string,
@@ -16,8 +24,7 @@ export class AuthService {
   ): Promise<UserPayload> {
     const user = await this.userService.validateUser(username, pass);
     if (user) {
-      const userPayload: UserPayload = { userId: user.id, email: user.email };
-      return userPayload;
+      return UserPayload.createFromUserDto(user);
     }
     return null;
   }
@@ -28,5 +35,29 @@ export class AuthService {
       userPayload: payload,
     };
     return jwtUserPayload;
+  }
+
+  public async loginBySocial(
+    type: SocialType,
+    socialProfile: SocialProfile,
+  ): Promise<UserPayload> {
+    const existingUser: UserDto = await this.userService.findBySocialId(
+      type,
+      socialProfile.id,
+    );
+
+    if (existingUser) {
+      return UserPayload.createFromUserDto(existingUser);
+    } else {
+      const email: string = socialProfile.email;
+      const createUserRequest = new RegisterRequestDto();
+      createUserRequest.email = email;
+      createUserRequest.socialType = type;
+      createUserRequest.avatar = socialProfile.avatar;
+      createUserRequest.displayName = socialProfile.displayName;
+      createUserRequest.socialId = socialProfile.id;
+      const user = await this.userService.createUser(createUserRequest);
+      return UserPayload.createFromUserDto(user);
+    }
   }
 }

@@ -12,6 +12,7 @@ import { AuthModule } from './api/auth/auth.module';
 import { CountryEntity } from './api/dictionaries/entities/country.entity';
 import { UserEntity } from './api/user/entities/user.entity';
 import { UserModule } from './api/user/user.module';
+import { SocialEntity } from './api/user/entities/social.entity';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UserModule } from './api/user/user.module';
         CountryEntity,
         LanguageEntity,
         UserEntity,
+        SocialEntity,
       ],
       synchronize: true,
       logging: true,

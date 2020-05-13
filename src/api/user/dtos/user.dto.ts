@@ -7,11 +7,17 @@ export default class UserDto {
 
   @ApiModelProperty()
   email: string;
+  @ApiModelProperty()
+  avatar: string;
+  @ApiModelProperty()
+  displayName: string;
 
   public static convertFromEntityToDto(entity: UserEntity): UserDto {
     const userDto = new UserDto();
     userDto.id = entity.id;
     userDto.email = entity.email;
+    userDto.avatar = entity.avatar;
+    userDto.displayName = entity.displayName;
     return userDto;
   }
 }

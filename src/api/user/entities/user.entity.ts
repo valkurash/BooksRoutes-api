@@ -1,6 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  BeforeInsert,
+  OneToMany,
+} from 'typeorm';
 import UserDto from '../dtos/user.dto';
 import * as bcrypt from 'bcrypt';
+import { SocialEntity } from './social.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -10,15 +17,30 @@ export class UserEntity {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
+
+  @Column({ nullable: true })
+  avatar: string;
+
+  @Column({ nullable: true })
+  displayName: string;
 
   @Column({ default: false })
   confirmed: boolean;
 
+  @OneToMany(
+    type => SocialEntity,
+    social => social.user,
+    { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
+  )
+  socials: SocialEntity[];
+
   @BeforeInsert()
   async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
   }
 
   public async comparePassword(attempt: string): Promise<boolean> {

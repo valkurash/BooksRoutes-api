@@ -3,14 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import UserDto from './dtos/user.dto';
-import UserWithPasswordDto from './dtos/userWithPassword.dto';
 import RegisterRequestDto from './dtos/register.request.dto';
+import exceptions from '../../exceptions/exceptions';
+import { SocialType } from './entities/socialType';
+import { SocialEntity } from './entities/social.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(SocialEntity)
+    private readonly socialRepository: Repository<SocialEntity>,
   ) {}
 
   public async validateUser(email: string, attempt: string): Promise<UserDto> {
@@ -34,13 +38,58 @@ export class UserService {
     return null;
   }
 
+  public async findById(id: number): Promise<UserDto> {
+    const findedUser = await this.userRepository.findOne({ id });
+    if (findedUser) {
+      return UserDto.convertFromEntityToDto(findedUser);
+    }
+    return null;
+  }
+
+  public async findBySocialId(
+    type: SocialType,
+    socialId: string,
+  ): Promise<UserDto> {
+    const findedSocial = await this.socialRepository.findOne(
+      {
+        socialId,
+        type,
+      },
+      { relations: ['user'] },
+    );
+    if (findedSocial) {
+      return UserDto.convertFromEntityToDto(findedSocial.user);
+    }
+    return null;
+  }
+
   public async createUser(
     createUserRequest: RegisterRequestDto,
   ): Promise<UserDto> {
-    const userEntity = new UserEntity();
-    userEntity.password = createUserRequest.password;
-    userEntity.email = createUserRequest.email;
-    const createdUser = await this.userRepository.save(userEntity);
+    let createdOrUpdatedUser: UserEntity;
+    createdOrUpdatedUser = await this.userRepository.findOne(
+      {
+        email: createUserRequest.email,
+      },
+      { relations: ['socials'] },
+    );
+    if (!createdOrUpdatedUser) {
+      createdOrUpdatedUser = new UserEntity();
+      createdOrUpdatedUser.password = createUserRequest.password;
+      createdOrUpdatedUser.avatar = createUserRequest.avatar;
+      createdOrUpdatedUser.displayName = createUserRequest.displayName;
+      createdOrUpdatedUser.email = createUserRequest.email;
+      createdOrUpdatedUser.socials = [];
+    }
+
+    if (createUserRequest.socialId && createUserRequest.socialType) {
+      const socialEntity = new SocialEntity();
+      socialEntity.type = createUserRequest.socialType;
+      socialEntity.socialId = createUserRequest.socialId;
+      createdOrUpdatedUser.socials.push(socialEntity);
+    }
+
+    const createdUser = await this.userRepository.save(createdOrUpdatedUser);
     return UserDto.convertFromEntityToDto(createdUser);
   }
 }
