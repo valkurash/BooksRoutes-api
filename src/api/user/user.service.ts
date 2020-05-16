@@ -62,7 +62,7 @@ export class UserService {
         socialId,
         type,
       },
-      { relations: ['user', 'socials'] },
+      { relations: ['user'] },
     );
     if (findedSocial) {
       return UserDto.convertFromEntityToDto(findedSocial.user);
