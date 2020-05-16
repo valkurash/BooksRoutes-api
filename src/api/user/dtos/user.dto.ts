@@ -1,5 +1,18 @@
 import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 import { UserEntity } from '../entities/user.entity';
+import { SocialType } from '../entities/socialType';
+
+export class SocialDto {
+  isFacebook: boolean;
+  isVkontakte: boolean;
+  isGoogle: boolean;
+
+  constructor() {
+    this.isGoogle = false;
+    this.isFacebook = false;
+    this.isGoogle = false;
+  }
+}
 
 export default class UserDto {
   @ApiModelProperty()
@@ -11,6 +24,8 @@ export default class UserDto {
   avatar: string;
   @ApiModelProperty()
   displayName: string;
+  @ApiModelProperty()
+  social: SocialDto;
 
   public static convertFromEntityToDto(entity: UserEntity): UserDto {
     const userDto = new UserDto();
@@ -18,6 +33,22 @@ export default class UserDto {
     userDto.email = entity.email;
     userDto.avatar = entity.avatar;
     userDto.displayName = entity.displayName;
+    if (entity.socials && entity.socials.length > 0) {
+      const socialDto = new SocialDto();
+      entity.socials.forEach(social => {
+        if (social.type === SocialType.VKONTAKTE) {
+          socialDto.isVkontakte = true;
+        }
+        if (social.type === SocialType.FACEBOOK) {
+          socialDto.isFacebook = true;
+        }
+        if (social.type === SocialType.GOOGLE) {
+          socialDto.isGoogle = true;
+        }
+      });
+      userDto.social = socialDto;
+    }
+
     return userDto;
   }
 }

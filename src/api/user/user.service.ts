@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import UserDto from './dtos/user.dto';
 import RegisterRequestDto from './dtos/register.request.dto';
-import exceptions from '../../exceptions/exceptions';
 import { SocialType } from './entities/socialType';
 import { SocialEntity } from './entities/social.entity';
+import UpdateProfileRequest from './dtos/updateProfileRequest';
+import ApiException from '../../exceptions/api.exception';
 
 @Injectable()
 export class UserService {
@@ -31,7 +32,10 @@ export class UserService {
   }
 
   public async findOne(email: string): Promise<UserDto> {
-    const findedUser = await this.userRepository.findOne({ email });
+    const findedUser = await this.userRepository.findOne(
+      { email },
+      { relations: ['socials'] },
+    );
     if (findedUser) {
       return UserDto.convertFromEntityToDto(findedUser);
     }
@@ -39,7 +43,10 @@ export class UserService {
   }
 
   public async findById(id: number): Promise<UserDto> {
-    const findedUser = await this.userRepository.findOne({ id });
+    const findedUser = await this.userRepository.findOne(
+      { id },
+      { relations: ['socials'] },
+    );
     if (findedUser) {
       return UserDto.convertFromEntityToDto(findedUser);
     }
@@ -55,12 +62,37 @@ export class UserService {
         socialId,
         type,
       },
-      { relations: ['user'] },
+      { relations: ['user', 'socials'] },
     );
     if (findedSocial) {
       return UserDto.convertFromEntityToDto(findedSocial.user);
     }
     return null;
+  }
+
+  public async updateUser(
+    id: number,
+    updateProfile: UpdateProfileRequest,
+  ): Promise<UserDto> {
+    const findedUser = await this.userRepository.findOne({ id });
+    if (!findedUser) {
+      throw new ApiException('user not found', 401);
+    } else {
+      let isChanged = false;
+      if (
+        updateProfile.displayName &&
+        updateProfile.displayName !== findedUser.displayName
+      ) {
+        findedUser.displayName = updateProfile.displayName;
+        isChanged = true;
+      }
+      if (updateProfile.avatar && updateProfile.avatar !== findedUser.avatar) {
+        findedUser.avatar = updateProfile.avatar;
+        isChanged = true;
+      }
+      const result = await this.userRepository.save(findedUser);
+      return UserDto.convertFromEntityToDto(result);
+    }
   }
 
   public async createUser(

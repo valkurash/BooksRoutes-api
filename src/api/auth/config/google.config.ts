@@ -5,8 +5,8 @@ export interface IFacebookConfig {
 
 export const googleConfig: IFacebookConfig = {
   client_id:
-    '838863851905-3i763pta8b18aqekmg9us971lsdotga2.apps.googleusercontent.com',
-  client_secret: 'bInX4kDYLx2U60npFCCujLb9',
+    '77192709105-628f7ohtud1mgmivro3o1meu7oo72hqr.apps.googleusercontent.com',
+  client_secret: 'BhaBsfVEV9vUilcRrxHVMiTF',
 };
 
 export default googleConfig;
