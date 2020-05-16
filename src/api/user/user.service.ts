@@ -91,7 +91,11 @@ export class UserService {
         isChanged = true;
       }
       const result = await this.userRepository.save(findedUser);
-      return UserDto.convertFromEntityToDto(result);
+      const updatedProfile = await this.userRepository.findOne(
+        { id },
+        { relations: ['socials'] },
+      );
+      return UserDto.convertFromEntityToDto(updatedProfile);
     }
   }
 
