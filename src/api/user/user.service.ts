@@ -8,6 +8,7 @@ import { SocialType } from './entities/socialType';
 import { SocialEntity } from './entities/social.entity';
 import UpdateProfileRequest from './dtos/updateProfileRequest';
 import ApiException from '../../exceptions/api.exception';
+import SocialProfile from '../auth/dto/socialProfile';
 
 @Injectable()
 export class UserService {
@@ -127,5 +128,29 @@ export class UserService {
 
     const createdUser = await this.userRepository.save(createdOrUpdatedUser);
     return UserDto.convertFromEntityToDto(createdUser);
+  }
+
+  public async attachSocial(
+    userId: number,
+    socialType: SocialType,
+    socialProfile: SocialProfile,
+  ): Promise<UserDto> {
+    const findedLink = await this.socialRepository.findOne({
+      where: { socialId: socialProfile.id, type: socialType },
+    });
+    if (findedLink) {
+      // update
+      throw new ApiException(
+        'This social profile was connected to another account',
+        500,
+      );
+    } else {
+      const newLink = new SocialEntity();
+      newLink.type = socialType;
+      newLink.socialId = socialProfile.id;
+      newLink.userId = userId;
+      await this.socialRepository.save(newLink);
+    }
+    return this.findById(userId);
   }
 }

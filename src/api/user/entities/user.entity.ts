@@ -29,6 +29,9 @@ export class UserEntity {
   @Column({ default: false })
   confirmed: boolean;
 
+  @Column({ default: false })
+  isAdmin: boolean;
+
   @OneToMany(
     type => SocialEntity,
     social => social.user,
@@ -46,12 +49,5 @@ export class UserEntity {
   public async comparePassword(attempt: string): Promise<boolean> {
     const compareResult = await bcrypt.compare(attempt, this.password);
     return compareResult;
-  }
-
-  public static convertEntityToDto(entity: UserEntity): UserDto {
-    const dto = new UserDto();
-    dto.email = entity.email;
-    dto.id = entity.id;
-    return dto;
   }
 }

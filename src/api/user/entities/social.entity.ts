@@ -18,4 +18,7 @@ export class SocialEntity {
     user => user.socials,
   )
   user: UserEntity;
+
+  @Column()
+  userId: number;
 }

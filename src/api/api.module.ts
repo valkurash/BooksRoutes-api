@@ -4,8 +4,18 @@ import { RouteModule } from './route/route.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ImageModule } from './image/image.module';
+import { AuthorModule } from './author/author.module';
+import { FixerModule } from './fixer/fixer.module';
 
 @Module({
-  imports: [BookModule, RouteModule, UserModule, AuthModule, ImageModule],
+  imports: [
+    BookModule,
+    AuthorModule,
+    RouteModule,
+    UserModule,
+    AuthModule,
+    ImageModule,
+    FixerModule,
+  ],
 })
 export class ApiModule {}

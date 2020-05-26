@@ -1,11 +1,10 @@
 import {
+  Body,
   Controller,
   Post,
-  UseGuards,
-  Request,
-  Body,
-  Get,
   Req,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -13,6 +12,12 @@ import LoginRequestDto from './dto/login.request.dto';
 import JwtUserPayload, { UserPayload } from './dto/jwtUserPayload.dto';
 import { LocalAuthGuard } from '../../guards/localAuth.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { VkontakteGuard } from '../../guards/socials/vkontakte.guard';
+import { SocialUser } from '../../guards/socialUser.decorator';
+import SocialProfile from './dto/socialProfile';
+import { SocialType } from '../user/entities/socialType';
+import { GoogleGuard } from '../../guards/socials/google.guard';
+import { FacebookGuard } from '../../guards/socials/facebook.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -31,41 +36,33 @@ export default class AuthController {
     return payload;
   }
 
-  @UseGuards(AuthGuard('facebook'))
+  @UseGuards(FacebookGuard)
   @Post('/facebook')
-  async authByFacebook(@Req() req) {
-    const payload = req.user as UserPayload;
+  async authByFacebook(@SocialUser() user: SocialProfile) {
+    const payload = await this.authService.loginBySocial(
+      SocialType.FACEBOOK,
+      user,
+    );
     return this.authService.login(payload);
   }
 
-  @UseGuards(AuthGuard('vkontakte'))
+  @UseGuards(VkontakteGuard)
   @Post('/vk')
-  async authByVkontakte(@Req() req) {
-    const payload = req.user as UserPayload;
+  async authByVkontakte(@SocialUser() user: SocialProfile) {
+    const payload = await this.authService.loginBySocial(
+      SocialType.VKONTAKTE,
+      user,
+    );
     return this.authService.login(payload);
   }
 
-  @UseGuards(AuthGuard('google'))
+  @UseGuards(GoogleGuard)
   @Post('/google')
-  async authByGoogle(@Req() req) {
-    const payload = req.user as UserPayload;
+  async authByGoogle(@SocialUser() user: SocialProfile) {
+    const payload = await this.authService.loginBySocial(
+      SocialType.GOOGLE,
+      user,
+    );
     return this.authService.login(payload);
   }
-
-  //
-  // @Post('facebook/token')
-  // async requestJsonWebTokenAfterFacebookSignIn(
-  //   @Request() req,
-  // ): Promise<JwtUserPayload> {
-  //   const payload = req.user as UserPayload;
-  //   return this.authService.login(payload);
-  // }
-  //
-  // @Get('vkontakte/token')
-  // async requestJsonWebTokenAfterVkontakteSignIn(
-  //   @Request() req,
-  // ): Promise<JwtUserPayload> {
-  //   const payload = req.user as UserPayload;
-  //   return this.authService.login(payload);
-  // }
 }

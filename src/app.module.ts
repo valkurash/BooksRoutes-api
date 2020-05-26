@@ -13,6 +13,7 @@ import { CountryEntity } from './api/dictionaries/entities/country.entity';
 import { UserEntity } from './api/user/entities/user.entity';
 import { UserModule } from './api/user/user.module';
 import { SocialEntity } from './api/user/entities/social.entity';
+import { ImageEntity } from './api/image/entities/image.entity';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { SocialEntity } from './api/user/entities/social.entity';
         LanguageEntity,
         UserEntity,
         SocialEntity,
+        ImageEntity,
       ],
       synchronize: true,
       logging: true,

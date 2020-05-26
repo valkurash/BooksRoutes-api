@@ -4,15 +4,28 @@ import { Crud, CrudAuth } from '@nestjsx/crud';
 import { CrudController } from '@nestjsx/crud/lib/interfaces/crud-controller.interface';
 import { BookEntity } from './entities/book.entity';
 import { BookService } from './book.service';
+import BooksPagination from './dtos/books.pagination.dto';
+import { BookDto } from './dtos/book.dto';
 
 @Crud({
   model: {
     type: BookEntity,
   },
+  serialize: {
+    getMany: BooksPagination,
+    get: BookDto,
+  },
   routes: {},
   query: {
     join: {
       authors: {
+        eager: true,
+        exclude: ['description', 'wiki', 'birthdate', 'dateOfDeath'],
+      },
+      'authors.avatar': {
+        eager: true,
+      },
+      coverImg: {
         eager: true,
       },
       routes: {

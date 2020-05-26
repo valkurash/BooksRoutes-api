@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Strategy as GoogleTokenStrategy } from 'passport-google-token';
-import UserDto from '../../user/dtos/user.dto';
-import { SocialType } from '../../user/entities/socialType';
-import RegisterRequestDto from '../../user/dtos/register.request.dto';
-import { UserPayload } from '../dto/jwtUserPayload.dto';
+import { SocialType } from '../../../user/entities/socialType';
 import { PassportStrategy } from '@nestjs/passport';
-import googleConfig from '../config/google.config';
-import { AuthService } from '../auth.service';
-import SocialProfile from '../dto/socialProfile';
+import googleConfig from '../../config/google.config';
+import { AuthService } from '../../auth.service';
+import SocialProfile from '../../dto/socialProfile';
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(
+export class GoogleLoginStrategy extends PassportStrategy(
   GoogleTokenStrategy,
   'google',
 ) {
@@ -37,11 +34,7 @@ export class GoogleStrategy extends PassportStrategy(
         displayName: profile.displayName,
         avatar: profile._json.picture,
       };
-      const payload = await this.authService.loginBySocial(
-        SocialType.GOOGLE,
-        socialProfile,
-      );
-      done(null, payload);
+      done(null, socialProfile);
     } catch (err) {
       done(err, null);
     }

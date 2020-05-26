@@ -10,7 +10,7 @@ export class SocialDto {
   constructor() {
     this.isGoogle = false;
     this.isFacebook = false;
-    this.isGoogle = false;
+    this.isVkontakte = false;
   }
 }
 
@@ -26,6 +26,8 @@ export default class UserDto {
   displayName: string;
   @ApiModelProperty()
   social: SocialDto;
+  @ApiModelProperty()
+  isAdmin: boolean;
 
   public static convertFromEntityToDto(entity: UserEntity): UserDto {
     const userDto = new UserDto();
@@ -33,6 +35,7 @@ export default class UserDto {
     userDto.email = entity.email;
     userDto.avatar = entity.avatar;
     userDto.displayName = entity.displayName;
+    userDto.isAdmin = entity.isAdmin;
     if (entity.socials && entity.socials.length > 0) {
       const socialDto = new SocialDto();
       entity.socials.forEach(social => {

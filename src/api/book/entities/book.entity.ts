@@ -3,11 +3,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { RouteEntity } from '../../route/entities/route.entity';
 import { AuthorEntity } from '../../author/entities/author.entity';
+import { ImageEntity } from '../../image/entities/image.entity';
 
 @Entity('book')
 export class BookEntity {
@@ -19,9 +21,6 @@ export class BookEntity {
 
   @Column({ nullable: true })
   isbn?: string;
-
-  @Column({ nullable: true })
-  cover?: string;
 
   @Column()
   description: string;
@@ -40,6 +39,15 @@ export class BookEntity {
     route => route.book,
   )
   routes: RouteEntity[];
+
+  @ManyToOne(
+    type => ImageEntity,
+    image => image.id,
+  )
+  coverImg: ImageEntity;
+
+  @Column({ nullable: false })
+  coverImgId: number;
 
   @ManyToMany(
     type => AuthorEntity,

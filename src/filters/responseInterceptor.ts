@@ -18,7 +18,7 @@ export class ResponseInterceptor<T>
     return next.handle().pipe(
       map(data => {
         //ToDo убрать костыль (почему то вызывается дважды в колбеке от фейсбука)
-        if (!data.toString()?.includes('errorCode')) {
+        if (!data?.toString()?.includes('errorCode')) {
           return { errorCode: 0, errorMessage: '', result: data };
         } else {
           return data;

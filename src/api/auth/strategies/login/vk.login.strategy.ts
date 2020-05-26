@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { use } from 'passport';
-import { SocialType } from '../../user/entities/socialType';
-import vkontakteConfig from '../config/vkontakte.config';
-import SocialProfile from '../dto/socialProfile';
-import { AuthService } from '../auth.service';
+import { SocialType } from '../../../user/entities/socialType';
+import vkontakteConfig from '../../config/vkontakte.config';
+import SocialProfile from '../../dto/socialProfile';
+import { AuthService } from '../../auth.service';
 const VKontakteTokenStrategy = require('passport-vkontakte-token');
 
 @Injectable()
@@ -44,11 +44,7 @@ export class VkontakteStrategy {
               displayName: profile.displayName,
               avatar: profile._json.photo_400_orig,
             };
-            const payload = await this.authService.loginBySocial(
-              SocialType.VKONTAKTE,
-              socialProfile,
-            );
-            done(null, payload);
+            done(null, socialProfile);
           } catch (err) {
             done(err, null);
           }
