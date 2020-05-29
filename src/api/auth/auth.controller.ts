@@ -5,6 +5,7 @@ import {
   Req,
   Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -18,9 +19,11 @@ import SocialProfile from './dto/socialProfile';
 import { SocialType } from '../user/entities/socialType';
 import { GoogleGuard } from '../../guards/socials/google.guard';
 import { FacebookGuard } from '../../guards/socials/facebook.guard';
+import { ResponseInterceptor } from '../../filters/responseInterceptor';
 
 @ApiTags('auth')
 @Controller('auth')
+@UseInterceptors(ResponseInterceptor)
 export default class AuthController {
   constructor(private readonly authService: AuthService) {}
 

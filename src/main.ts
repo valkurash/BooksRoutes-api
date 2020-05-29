@@ -11,9 +11,11 @@ async function bootstrap() {
     cors: true,
   });
   app.useStaticAssets(path.join(__dirname, '/../public'));
+  app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
+
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  //app.useGlobalInterceptors(new ResponseInterceptor());
   const options = new DocumentBuilder()
     .setTitle('Books Route')
     .setDescription('Апи для книг')
@@ -23,6 +25,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/docs', app, document);
+  app.setViewEngine('hbs');
   await app.listen(1337);
 }
 bootstrap();

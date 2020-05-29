@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { BookModule } from './book/book.module';
 import { RouteModule } from './route/route.module';
 import { AuthModule } from './auth/auth.module';
@@ -18,4 +18,6 @@ import { FixerModule } from './fixer/fixer.module';
     FixerModule,
   ],
 })
-export class ApiModule {}
+export class ApiModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {}
+}

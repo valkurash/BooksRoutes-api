@@ -7,6 +7,7 @@ import {
   Req,
   Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
@@ -23,9 +24,11 @@ import { VkontakteGuard } from '../../guards/socials/vkontakte.guard';
 import { FacebookGuard } from '../../guards/socials/facebook.guard';
 import { SocialUser } from '../../guards/socialUser.decorator';
 import { SocialType } from './entities/socialType';
+import { ResponseInterceptor } from '../../filters/responseInterceptor';
 
 @ApiTags('user')
 @Controller('user')
+@UseInterceptors(ResponseInterceptor)
 export default class UserController {
   constructor(private readonly userService: UserService) {}
 

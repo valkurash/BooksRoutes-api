@@ -16,6 +16,7 @@ import { ImageEntity } from './entities/image.entity';
 import { Crud, CrudRequest, Override, ParsedRequest } from '@nestjsx/crud';
 import ImagesPagination from './dtos/images.pagination.dto';
 import { ImageType } from './entities/imageType.enum';
+import { ResponseInterceptor } from '../../filters/responseInterceptor';
 
 @Crud({
   model: {
@@ -30,6 +31,7 @@ import { ImageType } from './entities/imageType.enum';
 })
 @ApiTags('image')
 @Controller('image')
+@UseInterceptors(ResponseInterceptor)
 export class ImageController implements CrudController<ImageEntity> {
   constructor(public service: ImageService) {}
 

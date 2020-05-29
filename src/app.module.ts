@@ -14,6 +14,7 @@ import { UserEntity } from './api/user/entities/user.entity';
 import { UserModule } from './api/user/user.module';
 import { SocialEntity } from './api/user/entities/social.entity';
 import { ImageEntity } from './api/image/entities/image.entity';
+import { WpostsModule } from './wordpress/posts/wposts.module';
 
 @Module({
   imports: [
@@ -39,8 +40,7 @@ import { ImageEntity } from './api/image/entities/image.entity';
       logging: true,
     }),
     ApiModule,
-    AuthModule,
-    UserModule,
+    WpostsModule,
   ],
 })
 export class AppModule {}
