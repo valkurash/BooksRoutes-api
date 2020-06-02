@@ -5,9 +5,9 @@ import {
   BeforeInsert,
   OneToMany,
 } from 'typeorm';
-import UserDto from '../dtos/user.dto';
 import * as bcrypt from 'bcrypt';
 import { SocialEntity } from './social.entity';
+import { BookrateEntity } from '../../rating/entity/bookrate.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -38,6 +38,12 @@ export class UserEntity {
     { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
   )
   socials: SocialEntity[];
+
+  @OneToMany(
+    type => BookrateEntity,
+    like => like.user,
+  )
+  likes: BookrateEntity[];
 
   @BeforeInsert()
   async hashPassword() {

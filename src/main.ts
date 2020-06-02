@@ -5,6 +5,7 @@ import { HttpExceptionFilter } from './filters/http.exception.filter';
 import { ResponseInterceptor } from './filters/responseInterceptor';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -12,6 +13,7 @@ async function bootstrap() {
   });
   app.useStaticAssets(path.join(__dirname, '/../public'));
   app.setBaseViewsDir(path.join(__dirname, '..', 'views'));
+  app.useGlobalPipes(new ValidationPipe());
 
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new HttpExceptionFilter());

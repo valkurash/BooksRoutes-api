@@ -8,13 +8,13 @@ import { RouteEntity } from './api/route/entities/route.entity';
 import { LanguageEntity } from './api/dictionaries/entities/language.entity';
 import { PointEntity } from './api/route/entities/point.entity';
 import { ApiModule } from './api/api.module';
-import { AuthModule } from './api/auth/auth.module';
 import { CountryEntity } from './api/dictionaries/entities/country.entity';
 import { UserEntity } from './api/user/entities/user.entity';
-import { UserModule } from './api/user/user.module';
 import { SocialEntity } from './api/user/entities/social.entity';
 import { ImageEntity } from './api/image/entities/image.entity';
 import { WpostsModule } from './wordpress/posts/wposts.module';
+import { BookrateEntity } from './api/rating/entity/bookrate.entity';
+import { AuthorrateEntity } from './api/rating/entity/authorrate.entity';
 
 @Module({
   imports: [
@@ -35,6 +35,8 @@ import { WpostsModule } from './wordpress/posts/wposts.module';
         UserEntity,
         SocialEntity,
         ImageEntity,
+        BookrateEntity,
+        AuthorrateEntity,
       ],
       synchronize: true,
       logging: true,

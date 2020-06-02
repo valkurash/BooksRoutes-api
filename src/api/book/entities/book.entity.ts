@@ -10,6 +10,7 @@ import {
 import { RouteEntity } from '../../route/entities/route.entity';
 import { AuthorEntity } from '../../author/entities/author.entity';
 import { ImageEntity } from '../../image/entities/image.entity';
+import { BookrateEntity } from '../../rating/entity/bookrate.entity';
 
 @Entity('book')
 export class BookEntity {
@@ -55,4 +56,10 @@ export class BookEntity {
   )
   @JoinTable()
   authors: AuthorEntity[];
+
+  @OneToMany(
+    type => BookrateEntity,
+    like => like.book,
+  )
+  likes: BookrateEntity[];
 }

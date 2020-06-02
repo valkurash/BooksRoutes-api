@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { BookEntity } from '../../book/entities/book.entity';
 import { ImageEntity } from '../../image/entities/image.entity';
+import { AuthorrateEntity } from '../../rating/entity/authorrate.entity';
 
 @Entity('author')
 export class AuthorEntity {
@@ -38,6 +39,12 @@ export class AuthorEntity {
     book => book.authors,
   )
   books: BookEntity[];
+
+  @OneToMany(
+    type => AuthorrateEntity,
+    like => like.author,
+  )
+  likes: AuthorrateEntity[];
 
   @Column({ nullable: true })
   birthdate: Date;
