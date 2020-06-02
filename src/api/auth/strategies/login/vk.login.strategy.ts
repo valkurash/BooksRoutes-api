@@ -18,6 +18,7 @@ export class VkontakteStrategy {
       new VKontakteTokenStrategy(
         {
           clientID: vkontakteConfig.client_id,
+          apiVersion: '5.21',
           clientSecret: vkontakteConfig.client_secret,
           profileFields: [
             'uid',
