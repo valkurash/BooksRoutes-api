@@ -24,7 +24,7 @@ export class AuthorrateEntity {
   user: UserEntity;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column()
   authorId: number;

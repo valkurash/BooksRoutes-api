@@ -15,7 +15,7 @@ export class RatingService {
   ) {}
 
   public async addBookRating(
-    userId: number,
+    userId: string,
     bookId: number,
     rating: number,
   ): Promise<boolean> {
@@ -28,7 +28,7 @@ export class RatingService {
   }
 
   public async addAuthorRating(
-    userId: number,
+    userId: string,
     autorId: number,
     rating: number,
   ): Promise<boolean> {

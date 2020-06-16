@@ -20,5 +20,5 @@ export class SocialEntity {
   user: UserEntity;
 
   @Column()
-  userId: number;
+  userId: string;
 }

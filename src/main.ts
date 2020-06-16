@@ -2,12 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './filters/http.exception.filter';
-import { ResponseInterceptor } from './filters/responseInterceptor';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
 import { ValidationPipe } from '@nestjs/common';
+import validateEnv from './env.init';
 
 async function bootstrap() {
+  validateEnv();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
   });

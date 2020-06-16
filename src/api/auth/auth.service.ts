@@ -56,7 +56,7 @@ export class AuthService {
       createUserRequest.avatar = socialProfile.avatar;
       createUserRequest.displayName = socialProfile.displayName;
       createUserRequest.socialId = socialProfile.id;
-      const user = await this.userService.createUser(createUserRequest);
+      const user = await this.userService.createUser(createUserRequest, true);
       return UserPayload.createFromUserDto(user);
     }
   }

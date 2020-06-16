@@ -11,8 +11,8 @@ import { BookrateEntity } from '../../rating/entity/bookrate.entity';
 
 @Entity('user')
 export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   email: string;
@@ -28,6 +28,9 @@ export class UserEntity {
 
   @Column({ default: false })
   confirmed: boolean;
+
+  @Column({ nullable: true })
+  confirmationCode?: number;
 
   @Column({ default: false })
   isAdmin: boolean;

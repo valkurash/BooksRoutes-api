@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import BaseApiResponse from '../base/base.api.response';
 import ApiException from '../exceptions/api.exception';
+import ExternalServicesException from '../exceptions/externalServicesException';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -41,6 +42,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       case ApiException:
         json = this.createJsonFromApiException(exception as ApiException);
         break;
+
+      case ExternalServicesException:
+        json = this.createJsonFromExternalServicesException(
+          exception as ExternalServicesException,
+        );
+        break;
     }
 
     if (!json) {
@@ -48,6 +55,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     response.status(200).json(json);
+  }
+
+  private createJsonFromExternalServicesException(
+    exception: ExternalServicesException,
+  ): BaseApiResponse<string> {
+    let validation;
+
+    return {
+      result: null,
+      errorCode: exception.getStatus(),
+      errorMessage: exception.message,
+      validation,
+    };
   }
 
   private createJsonFromApiException(

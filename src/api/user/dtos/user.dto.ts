@@ -16,7 +16,7 @@ export class SocialDto {
 
 export default class UserDto {
   @ApiModelProperty()
-  id: number;
+  id: string;
 
   @ApiModelProperty()
   email: string;

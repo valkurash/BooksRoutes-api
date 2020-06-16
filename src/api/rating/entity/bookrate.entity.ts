@@ -23,7 +23,7 @@ export class BookrateEntity {
   user: UserEntity;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column()
   bookId: number;

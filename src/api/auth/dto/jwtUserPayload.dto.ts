@@ -3,7 +3,7 @@ import UserDto from '../../user/dtos/user.dto';
 
 export class UserPayload {
   @ApiModelProperty()
-  userId: number;
+  userId: string;
   @ApiModelProperty()
   email: string;
 

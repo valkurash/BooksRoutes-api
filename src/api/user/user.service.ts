@@ -9,6 +9,8 @@ import { SocialEntity } from './entities/social.entity';
 import UpdateProfileRequest from './dtos/updateProfileRequest';
 import ApiException from '../../exceptions/api.exception';
 import SocialProfile from '../auth/dto/socialProfile';
+import { generateDigits } from '../../utils/utils';
+import { EventService } from '../../event/event.service';
 
 @Injectable()
 export class UserService {
@@ -17,6 +19,7 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(SocialEntity)
     private readonly socialRepository: Repository<SocialEntity>,
+    private readonly eventService: EventService,
   ) {}
 
   public async validateUser(email: string, attempt: string): Promise<UserDto> {
@@ -43,7 +46,7 @@ export class UserService {
     return null;
   }
 
-  public async findById(id: number): Promise<UserDto> {
+  public async findById(id: string): Promise<UserDto> {
     const findedUser = await this.userRepository.findOne(
       { id },
       { relations: ['socials'] },
@@ -72,7 +75,7 @@ export class UserService {
   }
 
   public async updateUser(
-    id: number,
+    id: string,
     updateProfile: UpdateProfileRequest,
   ): Promise<UserDto> {
     const findedUser = await this.userRepository.findOne({ id });
@@ -102,6 +105,7 @@ export class UserService {
 
   public async createUser(
     createUserRequest: RegisterRequestDto,
+    isConfirmed = false,
   ): Promise<UserDto> {
     let createdOrUpdatedUser: UserEntity;
     createdOrUpdatedUser = await this.userRepository.findOne(
@@ -114,6 +118,8 @@ export class UserService {
       createdOrUpdatedUser = new UserEntity();
       createdOrUpdatedUser.password = createUserRequest.password;
       createdOrUpdatedUser.avatar = createUserRequest.avatar;
+      createdOrUpdatedUser.confirmed = isConfirmed;
+      createdOrUpdatedUser.confirmationCode = generateDigits();
       createdOrUpdatedUser.displayName = createUserRequest.displayName;
       createdOrUpdatedUser.email = createUserRequest.email;
       createdOrUpdatedUser.socials = [];
@@ -127,11 +133,28 @@ export class UserService {
     }
 
     const createdUser = await this.userRepository.save(createdOrUpdatedUser);
+    await this.eventService.createUser({
+      userId: createdUser.id,
+      login: createdUser.displayName
+        ? createdUser.displayName
+        : createdUser.email,
+      email: createdUser.email,
+      phone: '-',
+    });
+
+    if (!isConfirmed) {
+      await this.eventService.sendConfirmationEmail({
+        userId: createdOrUpdatedUser.id,
+        code: createdOrUpdatedUser.confirmationCode,
+        email: createdOrUpdatedUser.email,
+        login: createdOrUpdatedUser.displayName,
+      });
+    }
     return UserDto.convertFromEntityToDto(createdUser);
   }
 
   public async attachSocial(
-    userId: number,
+    userId: string,
     socialType: SocialType,
     socialProfile: SocialProfile,
   ): Promise<UserDto> {
