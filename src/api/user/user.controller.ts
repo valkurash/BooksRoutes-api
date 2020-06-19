@@ -25,6 +25,7 @@ import { FacebookGuard } from '../../guards/socials/facebook.guard';
 import { SocialUser } from '../../guards/socialUser.decorator';
 import { SocialType } from './entities/socialType';
 import { ResponseInterceptor } from '../../filters/responseInterceptor';
+import ConfirmEmailRequest from './dtos/confirmEmail.request.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -47,7 +48,17 @@ export default class UserController {
     @Request() req,
     @Body() request: RegisterRequestDto,
   ): Promise<UserDto> {
-    return this.userService.createUser(request);
+    return this.userService.createUser(request, false, false);
+  }
+
+  @ApiOperation({ summary: 'Подтверждение кода' })
+  @ApiResponse({ status: 200 })
+  @Post('/confirm')
+  public async confirm(
+    @Request() req,
+    @Body() request: ConfirmEmailRequest,
+  ): Promise<boolean> {
+    return this.userService.confirmEmail(request.email, request.code);
   }
 
   @ApiOperation({ summary: 'Обновление профиля' })

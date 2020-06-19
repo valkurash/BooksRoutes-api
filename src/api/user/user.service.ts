@@ -106,6 +106,7 @@ export class UserService {
   public async createUser(
     createUserRequest: RegisterRequestDto,
     isConfirmed = false,
+    isOvveride = true,
   ): Promise<UserDto> {
     let createdOrUpdatedUser: UserEntity;
     createdOrUpdatedUser = await this.userRepository.findOne(
@@ -114,6 +115,9 @@ export class UserService {
       },
       { relations: ['socials'] },
     );
+    if (!isOvveride && createdOrUpdatedUser) {
+      throw new ApiException('User already is exists', 800);
+    }
     if (!createdOrUpdatedUser) {
       createdOrUpdatedUser = new UserEntity();
       createdOrUpdatedUser.password = createUserRequest.password;
@@ -175,5 +179,19 @@ export class UserService {
       await this.socialRepository.save(newLink);
     }
     return this.findById(userId);
+  }
+
+  public async confirmEmail(email: string, code: string): Promise<boolean> {
+    const findedUser = await this.userRepository.findOne({
+      where: { email: email, confirmationCode: code },
+    });
+
+    if (findedUser) {
+      findedUser.confirmed = true;
+      await this.userRepository.save(findedUser);
+      return true;
+    } else {
+      throw new ApiException('code is not correct', 401);
+    }
   }
 }
