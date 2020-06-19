@@ -50,6 +50,8 @@ export default class UserDto {
         }
       });
       userDto.social = socialDto;
+    } else {
+      userDto.social = new SocialDto();
     }
 
     return userDto;
