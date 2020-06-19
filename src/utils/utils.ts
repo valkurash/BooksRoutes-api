@@ -5,6 +5,8 @@ export function addZeroes(num) {
   return test;
 }
 
-export function generateDigits(): number {
-  return Math.floor(1000 + Math.random() * 9000);
+export function generateDigits(length: number): number {
+  return Math.floor(
+    Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1),
+  );
 }

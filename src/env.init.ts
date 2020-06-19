@@ -14,5 +14,6 @@ export default function validateEnv() {
     IMAGE_HOST: envalid.str(),
     EVENT_SERVICE_ADDRESS: envalid.str(),
     AUTHORIZATION_COMPLETE_EVENT: envalid.str(),
+    RESET_PASSWORD_EVENT: envalid.str(),
   });
 }

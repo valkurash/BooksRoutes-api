@@ -26,6 +26,8 @@ import { SocialUser } from '../../guards/socialUser.decorator';
 import { SocialType } from './entities/socialType';
 import { ResponseInterceptor } from '../../filters/responseInterceptor';
 import ConfirmEmailRequest from './dtos/confirmEmail.request.dto';
+import RecoverPasswordRequest from './dtos/recoverPassword.request.dto';
+import ResetPasswordRequest from './dtos/resetPassword.request.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -49,6 +51,30 @@ export default class UserController {
     @Body() request: RegisterRequestDto,
   ): Promise<UserDto> {
     return this.userService.createUser(request, false, false);
+  }
+
+  @ApiOperation({ summary: 'Отправить код на восстановление пароля' })
+  @ApiResponse({ status: 200 })
+  @Post('/recover')
+  public async recoverPassword(
+    @Request() req,
+    @Body() request: RecoverPasswordRequest,
+  ): Promise<boolean> {
+    return this.userService.recoverPassword(request.email);
+  }
+
+  @ApiOperation({ summary: 'Восстановить пароль по коду' })
+  @ApiResponse({ status: 200 })
+  @Post('/reset')
+  public async resetPassword(
+    @Request() req,
+    @Body() request: ResetPasswordRequest,
+  ): Promise<boolean> {
+    return this.userService.resetPassword(
+      request.email,
+      request.code,
+      request.password,
+    );
   }
 
   @ApiOperation({ summary: 'Подтверждение кода' })

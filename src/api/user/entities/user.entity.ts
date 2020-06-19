@@ -51,8 +51,12 @@ export class UserEntity {
   @BeforeInsert()
   async hashPassword() {
     if (this.password) {
-      this.password = await bcrypt.hash(this.password, 10);
+      this.hash();
     }
+  }
+
+  public async hash() {
+    this.password = await bcrypt.hash(this.password, 10);
   }
 
   public async comparePassword(attempt: string): Promise<boolean> {

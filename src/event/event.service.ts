@@ -6,6 +6,7 @@ import ExternalServicesException from '../exceptions/externalServicesException';
 import EventDto from './dto/event.dto';
 import AccountConfirmationEventPayload from './eventPayloads/accountConfirmationEventPayload';
 import { Channel } from './dto/channel';
+import ResetPasswordEventPayload from './eventPayloads/resetPasswordEventPayload';
 
 @Injectable()
 export class EventService {
@@ -33,6 +34,27 @@ export class EventService {
     try {
       const url = `${process.env.EVENT_SERVICE_ADDRESS}/api/notification`;
       const splitted = process.env.AUTHORIZATION_COMPLETE_EVENT.split(':');
+      const streamId = splitted[0];
+      const eventId = splitted[1];
+      const eventDto: EventDto = {
+        data: payload,
+        filter: { userIds: [payload.userId], channels: [Channel.email] },
+        eventId: parseInt(eventId),
+        streamId: parseInt(streamId),
+      };
+      const response = await Axios.post<BaseApiResponse<EventUserDto>>(
+        url,
+        eventDto,
+      );
+    } catch (e) {
+      throw new ExternalServicesException(e.message, 400);
+    }
+  }
+
+  public async sendRecoveryPassword(payload: ResetPasswordEventPayload) {
+    try {
+      const url = `${process.env.EVENT_SERVICE_ADDRESS}/api/notification`;
+      const splitted = process.env.RESET_PASSWORD_EVENT.split(':');
       const streamId = splitted[0];
       const eventId = splitted[1];
       const eventDto: EventDto = {

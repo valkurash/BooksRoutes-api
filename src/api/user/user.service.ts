@@ -123,7 +123,7 @@ export class UserService {
       createdOrUpdatedUser.password = createUserRequest.password;
       createdOrUpdatedUser.avatar = createUserRequest.avatar;
       createdOrUpdatedUser.confirmed = isConfirmed;
-      createdOrUpdatedUser.confirmationCode = generateDigits();
+      createdOrUpdatedUser.confirmationCode = generateDigits(9);
       createdOrUpdatedUser.displayName = createUserRequest.displayName;
       createdOrUpdatedUser.email = createUserRequest.email;
       createdOrUpdatedUser.socials = [];
@@ -188,6 +188,40 @@ export class UserService {
 
     if (findedUser) {
       findedUser.confirmed = true;
+      await this.userRepository.save(findedUser);
+      return true;
+    } else {
+      throw new ApiException('code is not correct', 401);
+    }
+  }
+
+  public async recoverPassword(email: string): Promise<boolean> {
+    const findedUser = await this.userRepository.findOne({
+      where: { email: email },
+    });
+
+    if (!findedUser) {
+      throw new ApiException('user not found', 404);
+    }
+
+    findedUser.confirmationCode = generateDigits(9);
+    await this.eventService.sendRecoveryPassword({
+      userId: findedUser.id,
+      code: findedUser.confirmationCode,
+      email: findedUser.email,
+      login: findedUser.displayName,
+    });
+    return true;
+  }
+
+  public async resetPassword(email: string, code: string, password: string) {
+    const findedUser = await this.userRepository.findOne({
+      where: { email: email, confirmationCode: code },
+    });
+
+    if (findedUser) {
+      findedUser.password = password;
+      await findedUser.hash();
       await this.userRepository.save(findedUser);
       return true;
     } else {
