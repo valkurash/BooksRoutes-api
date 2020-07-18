@@ -20,6 +20,8 @@ import { SocialType } from '../user/entities/socialType';
 import { GoogleGuard } from '../../guards/socials/google.guard';
 import { FacebookGuard } from '../../guards/socials/facebook.guard';
 import { ResponseInterceptor } from '../../filters/responseInterceptor';
+import { AppleLoginStrategy } from './strategies/login/apple.login.strategy';
+import { AppleGuard } from '../../guards/socials/apple.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -64,6 +66,16 @@ export default class AuthController {
   async authByGoogle(@SocialUser() user: SocialProfile) {
     const payload = await this.authService.loginBySocial(
       SocialType.GOOGLE,
+      user,
+    );
+    return this.authService.login(payload);
+  }
+
+  @UseGuards(AppleGuard)
+  @Post('/apple')
+  async authByApple(@SocialUser() user: SocialProfile) {
+    const payload = await this.authService.loginBySocial(
+      SocialType.APPLE,
       user,
     );
     return this.authService.login(payload);

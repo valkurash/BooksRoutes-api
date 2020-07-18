@@ -4,8 +4,6 @@ import facebookConfig from '../../config/facebook.config';
 
 import * as PassportFacebookToken from 'passport-facebook-token';
 
-import { SocialType } from '../../../user/entities/socialType';
-
 import { PassportStrategy } from '@nestjs/passport';
 import SocialProfile from '../../dto/socialProfile';
 import { AuthService } from '../../auth.service';

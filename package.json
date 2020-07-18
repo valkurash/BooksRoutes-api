@@ -29,6 +29,7 @@
     "@nestjs/typeorm": "^7.0.0",
     "@nestjsx/crud": "^4.4.5",
     "@nestjsx/crud-typeorm": "^4.4.5",
+    "@nicokaiser/passport-apple": "^0.2.1",
     "@types/geojson": "^7946.0.7",
     "@types/passport-facebook-token": "^0.4.34",
     "@types/passport-jwt": "^3.0.3",

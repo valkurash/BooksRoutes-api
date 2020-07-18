@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Strategy as GoogleTokenStrategy } from 'passport-google-token';
-import { SocialType } from '../../../user/entities/socialType';
 import { PassportStrategy } from '@nestjs/passport';
 import googleConfig from '../../config/google.config';
 import { AuthService } from '../../auth.service';
