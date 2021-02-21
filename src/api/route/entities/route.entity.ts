@@ -32,6 +32,7 @@ export class RouteEntity {
   @OneToMany(
     type => PointEntity,
     point => point.route,
+    { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
   )
   points: PointEntity[];
 

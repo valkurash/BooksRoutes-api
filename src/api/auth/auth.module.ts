@@ -17,7 +17,7 @@ import { AppleLoginStrategy } from './strategies/login/apple.login.strategy';
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60d' },
+      signOptions: { expiresIn: '900d' },
     }),
   ],
   controllers: [AuthController],

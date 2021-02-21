@@ -42,6 +42,7 @@
     "envalid": "^6.0.2",
     "form-data": "^3.0.0",
     "hbs": "^4.1.1",
+    "kml-parse": "0.0.2",
     "moment": "^2.26.0",
     "passport": "^0.4.1",
     "passport-facebook-token": "^3.3.0",
@@ -58,7 +59,8 @@
     "rxjs": "^6.5.4",
     "swagger-ui-express": "^4.1.4",
     "typeorm": "^0.2.24",
-    "wpapi": "^1.2.1"
+    "wpapi": "^1.2.1",
+    "xmldom": "^0.4.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^6.13.2",

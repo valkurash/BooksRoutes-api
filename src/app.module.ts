@@ -16,6 +16,7 @@ import { WpostsModule } from './wordpress/posts/wposts.module';
 import { BookrateEntity } from './api/rating/entity/bookrate.entity';
 import { AuthorrateEntity } from './api/rating/entity/authorrate.entity';
 import { EventModule } from './event/event.module';
+import { ImportModule } from './api/import/import.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { EventModule } from './event/event.module';
     ApiModule,
     EventModule,
     WpostsModule,
+    ImportModule,
   ],
 })
 export class AppModule {}
