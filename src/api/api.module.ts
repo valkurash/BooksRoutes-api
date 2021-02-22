@@ -7,6 +7,9 @@ import { ImageModule } from './image/image.module';
 import { AuthorModule } from './author/author.module';
 import { FixerModule } from './fixer/fixer.module';
 import { RatingModule } from './rating/rating.module';
+import { PointModule } from './point/point.module';
+import { CountryModule } from './country/country.module';
+import { LanguageModule } from './language/language.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { RatingModule } from './rating/rating.module';
     ImageModule,
     FixerModule,
     RatingModule,
+    PointModule,
+    CountryModule,
+    LanguageModule,
   ],
 })
 export class ApiModule implements NestModule {

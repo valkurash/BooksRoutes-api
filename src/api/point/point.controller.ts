@@ -2,14 +2,14 @@ import { ApiTags } from '@nestjs/swagger';
 import { Controller, UseInterceptors } from '@nestjs/common';
 import { Crud } from '@nestjsx/crud';
 import { CrudController } from '@nestjsx/crud/lib/interfaces/crud-controller.interface';
-import { BookEntity } from '../book/entities/book.entity';
-import { RouteEntity } from './entities/route.entity';
-import { RouteService } from './route.service';
+
 import { ResponseInterceptor } from '../../filters/responseInterceptor';
+import { PointService } from '../point/point.service';
+import { PointEntity } from '../route/entities/point.entity';
 
 @Crud({
   model: {
-    type: BookEntity,
+    type: PointEntity,
   },
   routes: {},
   query: {
@@ -20,18 +20,12 @@ import { ResponseInterceptor } from '../../filters/responseInterceptor';
       points: {
         eager: false,
       },
-      countries: {
-        eager: false,
-      },
-      languages: {
-        eager: false,
-      },
     },
   },
 })
-@ApiTags('route')
-@Controller('route')
+@ApiTags('point')
+@Controller('point')
 @UseInterceptors(ResponseInterceptor)
-export default class RouteController implements CrudController<RouteEntity> {
-  constructor(public service: RouteService) {}
+export default class PointController implements CrudController<PointEntity> {
+  constructor(public service: PointService) {}
 }

@@ -38,6 +38,7 @@ export class BookEntity {
   @OneToMany(
     type => RouteEntity,
     route => route.book,
+    { onDelete: 'CASCADE' },
   )
   routes: RouteEntity[];
 

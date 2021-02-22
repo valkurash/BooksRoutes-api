@@ -23,6 +23,10 @@ export class PointEntity {
   @ManyToOne(
     type => RouteEntity,
     route => route.points,
+    { onDelete: 'CASCADE' },
   )
   route: RouteEntity;
+
+  @Column()
+  routeId: number;
 }

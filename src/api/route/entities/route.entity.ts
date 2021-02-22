@@ -23,16 +23,19 @@ export class RouteEntity {
   @Column({ nullable: true })
   googlemymap?: string;
 
+  @Column()
+  bookId: number;
+
   @ManyToOne(
     type => BookEntity,
     book => book.routes,
+    { onDelete: 'CASCADE' },
   )
   book: BookEntity;
 
   @OneToMany(
     type => PointEntity,
     point => point.route,
-    { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' },
   )
   points: PointEntity[];
 
