@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   Entity,
   JoinTable,
@@ -63,4 +64,9 @@ export class BookEntity {
     like => like.book,
   )
   likes: BookrateEntity[];
+
+  @BeforeInsert()
+  beforeInsertActions() {
+    this.moderated = false;
+  }
 }
