@@ -43,7 +43,7 @@
     "form-data": "^3.0.0",
     "hbs": "^4.1.1",
     "kml-parse": "0.0.2",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "passport": "^0.4.1",
     "passport-facebook-token": "^3.3.0",
     "passport-google-oauth": "^2.0.0",
